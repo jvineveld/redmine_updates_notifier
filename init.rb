@@ -1,7 +1,7 @@
 
 require 'redmine'
 
-RAILS_DEFAULT_LOGGER.info 'Starting Updates Notifier plugin...'
+Rails.logger.info 'Starting Updates Notifier plugin...'
 
 require_dependency 'updates_notifier_issue_change_listener'
 
