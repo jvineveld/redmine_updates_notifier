@@ -14,7 +14,7 @@ class UpdatesNotifier < ActiveRecord::Base
     u = {"email" => user.mail, "firstname" => user.firstname, "lastname" => user.lastname}
     post_to_server({
         "type" => "issue",
-        "user" => u.to_json,
+        "user" => u,
         "issue" => issueId,
         "comment" => journal.notes,
         "changes" => changes.to_json,
@@ -28,7 +28,7 @@ private
     client = HTTPClient.new
     client.debug_dev = STDOUT if $DEBUG
     Rails.logger.debug("UPDATES_NOTIFIER: Posting update back to " + self.callback_url + ": " + data.to_json)
-    resp = client.post(self.callback_url, data)
+    resp = client.post(self.callback_url, data.to_json)
     Rails.logger.debug("UPDATES_NOTIFIER: Response code from " + self.callback_url + ": " + resp.status_code.to_s)
     return resp
   end
