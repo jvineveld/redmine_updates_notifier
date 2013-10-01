@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_updates_notifier do
   name 'Redmine Updates Notifier plugin'
   author 'Ramesh Nair'
   description 'This sends update notifications to a callback URL when changes are made within Redmine.'
-  version '0.0.1'
+  version '0.1.0'
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 
