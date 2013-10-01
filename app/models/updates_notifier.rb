@@ -35,7 +35,13 @@ private
     request['content-type'] = 'application/json'
 
     Rails.logger.debug("UPDATES_NOTIFIER: Posting update back to " + self.callback_url + ": " + data.to_json)
-    resp = client.request request
+    begin
+      resp = client.request request
+    rescue => e
+      Rails.logger.error("UPDATES_NOTIFIER: Posting failed: " + e.inspect)
+      return false
+    end
+
     Rails.logger.debug("UPDATES_NOTIFIER: Response code from " + self.callback_url + ": " + resp.code.to_s)
     return resp
   end
