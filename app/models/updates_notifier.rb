@@ -1,6 +1,8 @@
 require 'rubygems'
-require 'httpclient'
 require 'json'
+
+require 'net/http'
+require 'uri'
 
 class UpdatesNotifier < ActiveRecord::Base
   def self.send_issue_update(user, issueId, journal)
@@ -25,11 +27,16 @@ private
     return Setting.plugin_redmine_updates_notifier[:callback_url]
   end
   def self.post_to_server(data)
-    client = HTTPClient.new
-    client.debug_dev = STDOUT if $DEBUG
+    post_url = URI.parse self.callback_url
+    client = Net::HTTP.new post_url.host, post_url.port
+
+    request = Net::HTTP::Post.new File.join(post_url.request_uri)
+    request.body = data.to_json
+    request['content-type'] = 'application/json'
+
     Rails.logger.debug("UPDATES_NOTIFIER: Posting update back to " + self.callback_url + ": " + data.to_json)
-    resp = client.post(self.callback_url, data.to_json)
-    Rails.logger.debug("UPDATES_NOTIFIER: Response code from " + self.callback_url + ": " + resp.status_code.to_s)
+    resp = client.request request
+    Rails.logger.debug("UPDATES_NOTIFIER: Response code from " + self.callback_url + ": " + resp.code.to_s)
     return resp
   end
 end
