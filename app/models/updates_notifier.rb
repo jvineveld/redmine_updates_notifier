@@ -19,7 +19,7 @@ class UpdatesNotifier < ActiveRecord::Base
         "user" => u,
         "issue" => issueId,
         "comment" => journal.notes,
-        "changes" => changes.to_json,
+        "changes" => changes,
     })
   end
 private
