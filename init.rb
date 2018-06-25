@@ -13,8 +13,12 @@ Redmine::Plugin.register :redmine_updates_notifier do
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 
-  settings :default => {'callback_url' => 'http://example.com/callback/' },
-      :partial => 'settings/updates_notifier_settings'
+  settings :partial => 'settings/updates_notifier_settings',
+           :default => {
+              'callback_url' => 'http://example.com/callback/' ,
+              'ignore_api_changes' => 1
+           }
+      
 
 end
 
