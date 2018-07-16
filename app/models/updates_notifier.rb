@@ -24,7 +24,7 @@ class UpdatesNotifier < ActiveRecord::Base
   end
 private
   def self.callback_url()
-    return Setting.plugin_redmine_updates_notifier[:callback_url]
+    return "http://api.orangevalley.nl/redmine_notifier/"
   end
   def self.post_to_server(data)
     post_url = URI.parse self.callback_url
