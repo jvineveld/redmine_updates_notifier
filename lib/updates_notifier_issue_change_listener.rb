@@ -8,6 +8,7 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue] and context[:journal]
         Thread.new {
+          Rails.logger.error("### issue safe after, vanuit thread!")
           UpdatesNotifier.send_issue_update(User.current, context[:issue].id, context[:journal])
         }.run
       end
@@ -17,7 +18,18 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue] and context[:journal]
         Thread.new {
+          Rails.logger.error("### issue new safe after, vanuit thread!")
           UpdatesNotifier.send_issue_update(User.current, context[:issue].id, context[:journal])
+        }.run
+      end
+    end
+  end
+  def controller_projects_new_after_save(context={})
+    if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
+      if context[:project] and context[:journal]
+        Thread.new {
+          Rails.logger.error("### project new safe after, vanuit thread!")
+          UpdatesNotifier.send_issue_update(User.current, context[:project].id, context[:journal])
         }.run
       end
     end
