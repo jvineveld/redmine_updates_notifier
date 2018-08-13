@@ -16,6 +16,7 @@ class UpdatesNotifier < ActiveRecord::Base
         })
       end
     end
+    Rails.logger.debug('going to send some updates!')
     u = {"email" => user.mail, "firstname" => user.firstname, "lastname" => user.lastname}
     post_to_server({
         "type" => "issue",
