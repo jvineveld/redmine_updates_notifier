@@ -6,9 +6,6 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
     controller_issues_edit_after_save(context)
   end
   def controller_issues_edit_after_save(context={})
-    Rails.logger.error("### issue edit safe after, hook is run!")
-    Rails.logger.error(context[:params][:format])
-    Rails.logger.error(context[:issue])
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue] and context[:journal]
         currentUser = User.current
@@ -19,9 +16,6 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
     end
   end
   def controller_issues_new_after_save(context={})
-    Rails.logger.error("### issue new safe after, hook is run!")
-    Rails.logger.error(context[:params][:format])
-    Rails.logger.error(context[:issue])
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue]
        Rails.logger.error("### issue new safe after, inside statement!")
