@@ -5,7 +5,7 @@ require 'net/http'
 require 'uri'
 
 class UpdatesNotifier < ActiveRecord::Base
-  def self.send_update(type, user, issueId, journal = false)
+  def self.send_update(type, user, entityId, journal = false)
     Rails.logger.debug(journal)
     changes = []
     notes = ''
@@ -23,7 +23,7 @@ class UpdatesNotifier < ActiveRecord::Base
     post_to_server({
         "type" => type,
         "user" => u,
-        "issue" => issueId,
+        "entityId" => entityId,
         "comment" => notes,
         "changes" => changes,
     })
