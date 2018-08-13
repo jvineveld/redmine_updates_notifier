@@ -18,10 +18,21 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
   def controller_issues_new_after_save(context={})
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue]
-       Rails.logger.error("### issue new safe after, inside statement!")
         currentUser = User.current
         Thread.new(currentUser, context) { |currentUser, context|
-        Rails.logger.error("### issue new safe after, inside thread!")
+          UpdatesNotifier.send_update('issue-new', currentUser, context[:issue].id)
+        }.run
+      end
+    end
+  end
+  def controller_issues_destroy(context={})
+    Rails.logger.error('issue is destroyd')
+    Rails.logger.error(context[:issue])
+    
+    if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
+      if context[:issue]
+        currentUser = User.current
+        Thread.new(currentUser, context) { |currentUser, context|
           UpdatesNotifier.send_update('issue-new', currentUser, context[:issue].id)
         }.run
       end
