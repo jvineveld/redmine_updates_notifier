@@ -5,14 +5,16 @@ require 'net/http'
 require 'uri'
 
 class UpdatesNotifier < ActiveRecord::Base
-  def self.send_issue_update(user, issueId, journal)
+  def self.send_issue_update(user, issueId, journal = false)
     Rails.logger.debug(journal)
     changes = []
-    journal.details.each do |j|
-      changes.push({
-        "property" => j.prop_key,
-        "value" => j.value
-      })
+    if journal
+      journal.details.each do |j|
+        changes.push({
+          "property" => j.prop_key,
+          "value" => j.value
+        })
+      end
     end
     u = {"email" => user.mail, "firstname" => user.firstname, "lastname" => user.lastname}
     post_to_server({
