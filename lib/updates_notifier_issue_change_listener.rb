@@ -30,9 +30,9 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
   def controller_projects_new_after_save(context={})
     Rails.logger.error("### issue new project, hook is run!")
     Rails.logger.error(context[:params][:format])
-    Rails.logger.error(context[:issue])
+    Rails.logger.error(context[:project])
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
-      if context[:project] and context[:journal]
+      if context[:project] 
         currentUser = User.current
         Thread.new(currentUser, context) { |currentUser, context|
         Rails.logger.error("### project new safe after, inside thread!")
