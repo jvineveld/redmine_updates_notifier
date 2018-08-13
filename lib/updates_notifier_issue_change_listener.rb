@@ -10,9 +10,11 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
       if context[:issue] and context[:journal]
         Rails.logger.error("### Current user info before thread!")
         Rails.logger.error(User.current)
-        Thread.new {
+        currentUser = User.current
+        Thread.new(currentUser, context) { |currentUser, context|
           Rails.logger.error("### issue safe after, vanuit thread!")
-          UpdatesNotifier.send_issue_update(User.current, context[:issue].id, context[:journal])
+          Rails.logger.error(currentUser)
+          UpdatesNotifier.send_issue_update(currentUser, context[:issue].id, context[:journal])
         }.run
       end
     end
