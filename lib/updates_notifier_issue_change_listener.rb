@@ -17,7 +17,8 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
   end
   def controller_issues_new_after_save(context={})
     Rails.logger.error("### issue new safe after, hook is run!")
-    Rails.logger.error(context)
+    Rails.logger.error(context[:params][:format])
+    Rails.logger.error(context[:issue])
     if !Setting.plugin_redmine_updates_notifier[:ignore_api_changes] or !context[:params][:format] or 'xml' != context[:params][:format]
       if context[:issue]
         currentUser = User.current
