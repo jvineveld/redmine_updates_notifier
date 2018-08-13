@@ -10,7 +10,7 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
       if context[:issue] and context[:journal]
         currentUser = User.current
         Thread.new(currentUser, context) { |currentUser, context|
-          UpdatesNotifier.send_issue_update('issue-edit', currentUser, context[:issue].id, context[:journal])
+          UpdatesNotifier.send_update('issue-edit', currentUser, context[:issue].id, context[:journal])
         }.run
       end
     end
@@ -22,7 +22,7 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
         currentUser = User.current
         Thread.new(currentUser, context) { |currentUser, context|
         Rails.logger.error("### issue new safe after, inside thread!")
-          UpdatesNotifier.send_issue_update('issue-new', currentUser, context[:issue].id)
+          UpdatesNotifier.send_update('issue-new', currentUser, context[:issue].id)
         }.run
       end
     end
@@ -36,7 +36,7 @@ class UpdatesNotifierIssueChangeListener < Redmine::Hook::Listener
         currentUser = User.current
         Thread.new(currentUser, context) { |currentUser, context|
         Rails.logger.error("### project new safe after, inside thread!")
-          UpdatesNotifier.send_issue_update('project-new', currentUser, context[:project].id)
+          UpdatesNotifier.send_update('project-new', currentUser, context[:project].id)
         }.run
       end
     end
