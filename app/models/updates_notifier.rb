@@ -6,6 +6,7 @@ require 'uri'
 
 class UpdatesNotifier < ActiveRecord::Base
   def self.send_issue_update(user, issueId, journal)
+    Rails.logger.debug(journal)
     changes = []
     journal.details.each do |j|
       changes.push({
